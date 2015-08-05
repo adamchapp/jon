@@ -1,32 +1,29 @@
 <div class="container">
-	<form class="form-submit" action="/submit" method="POST">
+	<form class="form-submit bs-example" action="/submit" method="POST" data-toggle="validator">
 		<H1>Patternform Scraper</H1>
 
 	    <div class="form-group">
-
-			<h3>1. Enter your details</h3>
-
-	        <input type="email" name="inputEmail" class="form-control" id="inputEmail" placeholder="Email">     
-	        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password">
+	        <input type="input" name="email" class="form-control" id="inputEmail" placeholder="Email" required>     	    
 	    </div>
 
-		<div class="form-group">
+	    <div class="form-group">
+	        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" required>
+	    </div>	
 
-			<h3>2. Choose your card type</h3>
+		<div class="form-group">
 
 	        <div class="radio">
-			  <label><input type="radio" name="optradio">PatternForm</label>
+			  <label><input type="radio" name="optradio" value="pttn" checked>PatternForm</label>
 			</div>
+
 			<div class="radio">
-			  <label><input type="radio" name="optradio">MoneyForm</label>
+			  <label><input type="radio" name="optradio" value="mny">MoneyForm</label>
 			</div>
+
 	    </div>
 
 		<div class="form-group">
-
-			<h3>3. Select date</h3>
-
-	        <input type="date" class="form-control" id="inputDate" name="date" placeholder="dd/mm/yyyy">
+	        <input type="date" class="form-control" id="inputDate" name="date" placeholder="dd/mm/yyyy" required>
 	    </div>
 
 		<div class="loginControl">
@@ -36,3 +33,5 @@
 	</form>
 
 </div>
+
+<script src="js/submit.js"></script>
