@@ -4,26 +4,33 @@ var distances = require('../../../model/domain/distances');
 var logger = require('../../../utils/logger');
 
 /**
- * Filters the distance dataprovider to get a distance object
+ * Either uses specified value or filters the distance dataprovider to get a distance value
  * @param  {Object} elem An object containing url, label and going properties
  * @return {Object}      An enriched object with distance property
  */
-module.exports = function extractDistance(elem) {
-	//split the string in half, using the going label
-    var distanceString = elem.title.split(elem.going.label)[1];
-    
-    // //create an array containing miles, furlongs and yards
-    var miles = format(distanceString.match(/[0-9]m/g), 'm'); 
-    var furlongs = format(distanceString.match(/\d{1,3}f/g), 'f');
-    var yards = format(distanceString.match(/\d{1,3}y/g), 'y');
+module.exports = function extractDistance(value, elem) {
 
-    var totalInFurlongs = calculateDistanceInFurlongs(miles, furlongs, yards);
+    if (value) {
+        logger.info('we already have a distance ' + value);
+        
+        elem.distance = value; 
+    } else {
+        //split the string in half, using the going label
+        var distanceString = elem.title.split(elem.going.label)[1];
+        
+        // //create an array containing miles, furlongs and yards
+        var miles = format(distanceString.match(/[0-9]m/g), 'm'); 
+        var furlongs = format(distanceString.match(/\d{1,3}f/g), 'f');
+        var yards = format(distanceString.match(/\d{1,3}y/g), 'y');
 
-    var result = distances.filter(function(distance) {
-        return Number(distance.furlongs) === Number(totalInFurlongs);
-    });
+        var totalInFurlongs = calculateDistanceInFurlongs(miles, furlongs, yards);
 
-    elem.distance = result[0];
+        var result = distances.filter(function(distance) {
+            return Number(distance.furlongs) === Number(totalInFurlongs);
+        });
+
+        elem.distance = result[0].value;
+    }
 
     // logger.debug('extracting distance: ' + distanceString + ':: ' + miles + 'm' + furlongs +'f' + yards + 'y', 'value in furlongs is ' + totalInFurlongs);
 

@@ -15,7 +15,7 @@ router.get('/', function(req, res, next) {
 });
 
 function addBlankPrefix(array) {
-	if (array[0].label === '') {
+	if (array[0].label !== '') {
 		array.unshift({
 			label: '', value: -1
 		})
