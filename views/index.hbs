@@ -1,37 +1,70 @@
 <div class="container">
-	<form class="form-submit bs-example" action="/submit" method="POST" data-toggle="validator">
-		<H1>Patternform Scraper</H1>
+	<form class="form-submit" action="/submit" method="POST" data-toggle="validator">
+	    <h1>Patternform 
+        	<small>web scraper</small>
+   		</h1>
 
-	    <div class="form-group">
-	        <input type="input" name="email" class="form-control" id="inputEmail" placeholder="Email" required>     	    
+	    <div class="form-group has-feedback">
+	    	<label for="inputUsername" class="control-label">Username</label>
+	        <input type="input" name="username" class="form-control" id="inputUsername" required>    
+	        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>
 	    </div>
 
-	    <div class="form-group">
-	        <input type="password" name="password" class="form-control" id="inputPassword" placeholder="Password" required>
+	    <div class="form-group has-feedback">
+	    	<label for="inputPassword" class="control-label">Password</label>
+	        <input type="password" name="password" class="form-control" id="inputPassword" required>
+	        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>	
 	    </div>	
 
+		<div class="form-group has-feedback">
+
+			<label for="inputDate" class="control-label">Date</label>
+
+	        <input type="text" class="form-control" id="inputDate" name="date" required>
+	        <span class="glyphicon form-control-feedback" aria-hidden="true"></span>	
+	    </div>
+
 		<div class="form-group">
 
-	        <div class="radio">
-			  <label><input type="radio" name="optradio" value="pttn" checked>PatternForm</label>
-			</div>
+			<label for="typeInput">Card type</label>
 
-			<div class="radio">
-			  <label><input type="radio" name="optradio" value="mny">MoneyForm</label>
-			</div>
+		    <select class="form-control" id="typeInput" name="type">
+				<option value="mny">MoneyForm</option>
+				<option value="pttn">Patternform</option>
+			</select>
 
 	    </div>
 
 		<div class="form-group">
-	        <input type="date" class="form-control" id="inputDate" name="date" placeholder="dd/mm/yyyy" required>
+
+			<label for="goingInput">Going</label>
+
+		    <select class="form-control" id="goingInput" name="type">
+				  {{#each goings}}
+  						<option value="{{value}}">{{label}}</option>
+  				  {{/each}}
+			</select>
+
+	    </div>
+
+		<div class="form-group">
+
+			<label for="distanceInput">Distance</label>
+
+		    <select class="form-control" id="distanceInput" name="type">
+				  {{#each distances}}
+  						<option value="{{value}}">{{label}}</option>
+  				  {{/each}}
+			</select>
+
 	    </div>
 
 		<div class="loginControl">
 			<button type="submit" class="btn btn-lg btn-primary btn-block">Go</button>
 		</div>
-	    
+
 	</form>
 
 </div>
 
-<script src="js/submit.js"></script>
+<script src="js/form-controls.js"></script>

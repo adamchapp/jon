@@ -46,26 +46,62 @@ exports.scrapeURLs = function(races) {
             spooky.thenEvaluate(going);
             spooky.thenEvaluate(distance);
 
-            spooky.then(function() {
+            spooky.then([{url:race.url}, function() {
                 var winners = this.evaluate(function (){
 
+                    var table = document.main.querySelectorAll('table')[1];
+                    var rows = table.querySelectorAll('tr');
+                    
+                    // __utils__.echo((rows.length-1) + ' horses');
+
+                    var runners = rows.length-1;
+                    var first = '';
+                    var second = '';
+
+                    for (var index=0; index<runners; index++)
+                    {
+                        var name = document.getElementById('h' + index).innerHTML;
+                        var ranTo = document.getElementById('hp' + index).innerHTML;
+
+                        var isSelection = (ranTo && ranTo.length > 0);
+
+                        if (isSelection)
+                        {
+                            if (first.length === 0)
+                            {
+                                first = name.split(') ')[1].split('[')[0];
+                            }
+                            else
+                            {
+                                second = name.split(') ')[1].split('[')[0];
+                            }
+                        }
+
+                        if (first.length > 0 && second.length > 0)
+                        {
+                            break;
+                        }
+                    }
+
                     var picks = {
-                        'first': h0.innerHTML, 
-                        'second': h1.innerHTML
+                        'first': first, 
+                        'second': second,
                     };                    
 
                     return picks;
                 });
 
-                this.emit('selected', winners);
-            });
+                winners.url = url;
 
-            // //take snapshot image after rules are applied
-            // spooky.wait(500, function() {
-            //     this.capture('images/final.png');   
-            //     // this.echo('final screenshot captured'); 
-            // });              
-            // 
+                this.emit('selected', winners);
+            }]);
+
+            //take snapshot image after rules are applied
+            spooky.wait(500, function() {
+                this.capture('images/final.png');   
+                // this.echo('final screenshot captured'); 
+            });              
+            
             
 
         })

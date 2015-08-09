@@ -1,5 +1,7 @@
 var express = require('express');
 var router = express.Router();
+var stream = require('stream');
+var csv = require('express-csv')
 var cookiesService = require('../scraper/services/cookieService');
 var scraperService = require('../scraper/services/scraperService');
 var crawlerService = require('../scraper/services/crawlerService');
@@ -13,10 +15,7 @@ var logger = require('../scraper/utils/logger');
 
 var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
-/* GET users listing. */
 router.post('/', function(req, res, next) {
-
-	logger.info(req.body);
 
 	logger.info(createURL(req.body));
 
@@ -38,18 +37,20 @@ router.post('/', function(req, res, next) {
 	})
 	.then(function(results) {
 		logger.info('we have ' + results.length + ' results');
+
+		res.csv(results)
 	})
 });
 
 function createURL(inputs) {
-	var prefix = (inputs.optradio = 'pttn') ? 'y' : 'xy';
+	var prefix = (inputs.type = 'pttn') ? 'y' : 'xy';
 	
-	var dateInputs = inputs.date.split('-');
+	var dateInputs = inputs.date.split('/');
 	var monthAsArrayIndex = dateInputs[1] - 1;
 	
-	var day = dateInputs[2];
+	var day = dateInputs[0];
 	var month = months[monthAsArrayIndex];
-	var year = dateInputs[0].substring(2, 4);;
+	var year = dateInputs[2].substring(2, 4);;
 
 	return 'http://www.patternform.co.uk/' + prefix + day + month + year + '.htm';
 }
