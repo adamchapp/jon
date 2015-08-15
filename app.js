@@ -64,5 +64,5 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.set('port', 9090); app.set('ipaddr', "127.0.0.1");
-app.listen();
+app.set('ipaddr', "127.0.0.1");
+app.listen(8080);
