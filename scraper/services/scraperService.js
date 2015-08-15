@@ -28,6 +28,8 @@ exports.scrapeURLs = function(races) {
 
         spooky.start();
 
+        logger.info('starting SppokyJS (scraperService)');
+
         races.forEach(function(race) {
 
             spooky.thenOpen(race.url);
@@ -48,6 +50,8 @@ exports.scrapeURLs = function(races) {
 
             spooky.then([{url:race.url}, function() {
                 var winners = this.evaluate(function (){
+                    
+                    srtOrder('hp');
 
                     var table = document.main.querySelectorAll('table')[1];
                     var rows = table.querySelectorAll('tr');
@@ -91,7 +95,10 @@ exports.scrapeURLs = function(races) {
                     return picks;
                 });
 
-                winners.url = url;
+                if (url && winners)
+                {
+                    winners.url = url;    
+                }
 
                 this.emit('selected', winners);
             }]);

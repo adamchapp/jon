@@ -2,7 +2,8 @@ $(document).ready(function(){
 
     $('#inputDate').datepicker({
         format: 'dd/mm/yyyy',
-    });
+        autoclose: true
+    }).setDate(new Date());
 
     $('.form-submit').validator().on('submit', function (e) {
         if (e.isDefaultPrevented()) {

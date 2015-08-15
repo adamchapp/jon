@@ -27,7 +27,7 @@ function crawl(url) {
 		if (err) {
 			logger.warn('there was an error ' + url);
 		} else {
-			logger.info('loading ' + url);
+			logger.info('Starting SpookyJS (crawlerService): ' + url);
 		}
 
 		spooky.start(url);

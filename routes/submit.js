@@ -18,20 +18,17 @@ var logger = require('../scraper/utils/logger');
 var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
 router.post('/', function(req, res, next) {
-
-	logger.info(createURL(req.body));
-
 	var url = createURL(req.body);
 	var username = req.body.username;
 	var password = req.body.password;
 	var going = req.body.going;
 	var distance = req.body.distance;
 
-	cookiesService.setCookies(username, password)
-    .then(function () {
-    	return crawlerService.crawl(url)
-	})	
-	.then(function(urls) {
+	// cookiesService.setCookies(username, password)
+ //    .then(function () {
+ //    	return 
+	// })	
+	crawlerService.crawl(url).then(function(urls) {
 		var extractGoing = _.partial(goingFunction, going);
 		var extractDistance = _.partial(distanceFunction, distance);
 		
@@ -55,9 +52,10 @@ function createURL(inputs) {
 	
 	var day = dateInputs[0];
 	var month = months[monthAsArrayIndex];
-	var year = dateInputs[2].substring(2, 4);;
+	var year4digits = dateInputs[2];
+	var year2digits = dateInputs[2].substring(2, 4);;
 
-	return 'http://www.patternform.co.uk/' + prefix + day + month + year + '.htm';
+	return 'http://www.patternform.co.uk/cards/' + year4digits + '/' + month + '/' + prefix + day + month + year2digits + '.htm';
 }
 
 module.exports = router;

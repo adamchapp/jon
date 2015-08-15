@@ -15,10 +15,7 @@ var goings = require('../../../model/domain/goings');
  */
 module.exports = function extractGoing(value, elem) {
 
-	if (value) {
-        elem.going = value;
-	} else {
-		var going = goings.map(function(going) {
+	var goingThatMatchesTitle = goings.map(function(going) {
 	    	var matches = elem.title.match(new RegExp('\\b' + going.label + '\\b'));
 			going.matchLevel = (matches !== null) ? matches[0].length : 0;    	
 	    	return going;
@@ -26,8 +23,19 @@ module.exports = function extractGoing(value, elem) {
 	    	return previous.matchLevel > current.matchLevel ? previous : current;
 	    });
 
-	    elem.going = going.value;	
+	if (value != -1) {
+
+		var results = _.filter(goings, function(going) {
+			return going.value == value;
+		});
+
+        elem.going = results[0];
+	} else {
+	    elem.going = goingThatMatchesTitle;	
 	}
+
+	//we use this label as a separator in the extractDistance function
+	elem.distanceSeparatorLabel = goingThatMatchesTitle.label;
         
     return elem;
 }

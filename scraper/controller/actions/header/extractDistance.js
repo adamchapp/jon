@@ -10,14 +10,14 @@ var logger = require('../../../utils/logger');
  */
 module.exports = function extractDistance(value, elem) {
 
-    if (value) {
+    if (value != -1 && value !== undefined) {
         logger.info('we already have a distance ' + value);
         
         elem.distance = value; 
     } else {
-        //split the string in half, using the going label
-        var distanceString = elem.title.split(elem.going.label)[1];
-        
+        //split the string in half, using the separator label from the going
+        var distanceString = elem.title.split(elem.distanceSeparatorLabel)[1];
+
         // //create an array containing miles, furlongs and yards
         var miles = format(distanceString.match(/[0-9]m/g), 'm'); 
         var furlongs = format(distanceString.match(/\d{1,3}f/g), 'f');
@@ -29,7 +29,7 @@ module.exports = function extractDistance(value, elem) {
             return Number(distance.furlongs) === Number(totalInFurlongs);
         });
 
-        elem.distance = result[0].value;
+        elem.distance = result[0];
     }
 
     // logger.debug('extracting distance: ' + distanceString + ':: ' + miles + 'm' + furlongs +'f' + yards + 'y', 'value in furlongs is ' + totalInFurlongs);
