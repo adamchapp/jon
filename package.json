@@ -2,7 +2,7 @@
   "name": "patternform",
   "version": "0.0.2",
   "private": true,
-  "main": "./bin/www",
+  "main": "app.js",
   "dependencies": {
     "body-parser": "~1.13.2",
     "casperjs": "^1.1.0-beta3",
