@@ -21,8 +21,6 @@
     "q": "^1.4.1",
     "serve-favicon": "~2.3.0",
     "spooky": "~0.2.5",
-    "winston": "^1.0.1",
-    "casperjs": "1.1.0-beta2",
-    "phantomjs": "1.9.7"
+    "winston": "^1.0.1"
   }
 }
