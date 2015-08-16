@@ -25,6 +25,11 @@ router.post('/', function(req, res, next) {
 	var distance = req.body.distance;
 
 	res.render('result');
+	logger.info('writing file to ' + __dirname);
+
+	fs.writeFile(__dirname + '../public/blah.txt', 'hello', function(err) {
+		logger.info('finished writing test file');
+	});
 
 	// cookiesService.setCookies(username, password)
  //    .then(function () {
@@ -41,8 +46,6 @@ router.post('/', function(req, res, next) {
 	})
 	.then(function(results) {
 		logger.info('there are ' + results.length + ' results');
-
-		logger.info('writing file to downloads/data.csv');
 
 		fs.writeFile('downloads/data.csv', results);
 	})
