@@ -39,6 +39,12 @@ router.post('/', function(req, res, next) {
 		var races = urls.map(extractGoing)
 						.map(extractDistance);
 
+		scraperService.on('result', function(winners) { 
+			console.log(JSON.stringify(winners));
+		});
+
+		scraperService.on('done', function())
+
 		return scraperService.scrapeURLs(urls);
 	})
 	.then(function(results) {

@@ -10,7 +10,6 @@ var setDistanceAction = require('../controller/actions/setDistanceAction');
 
 exports.scrapeURLs = function(races) {
     // logger.info(races);
-    var deferred = Q.defer();
 
     var results = [];
 
@@ -120,14 +119,12 @@ exports.scrapeURLs = function(races) {
         logger.debug(JSON.stringify(winners));
         results.push(winners);
 
+        this.emit(winners);
+
         if (results.length === races.length) {
             this.emit('done', results);
         }
     });
-
-    spooky.on('done', function(results) {
-        deferred.resolve(results);
-    })
 
 	spooky.on('console', function (line) {
         if (!line.match('Unsafe JavaScript attempt')) {
@@ -136,8 +133,6 @@ exports.scrapeURLs = function(races) {
     });
 
     spooky.on('fail', function() {
-        deferred.reject();
+        this.emit('error');
     });
-
-    return deferred.promise;
 };
