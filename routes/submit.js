@@ -27,7 +27,7 @@ router.post('/', function(req, res, next) {
 	res.render('result');
 	logger.info('writing file to ' + __dirname);
 
-	fs.writeFile(__dirname + '../public/blah.txt', 'hello', function(err) {
+	fs.writeFile(__dirname + 'public/blah.txt', 'hello', function(err) {
 		logger.info('finished writing test file');
 	});
 
