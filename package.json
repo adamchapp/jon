@@ -23,6 +23,6 @@
     "spooky": "~0.2.5",
     "winston": "^1.0.1",
     "casperjs": "1.1.0-beta2",
-    "phantomjs": "^1.9.8"
+    "phantomjs": "1.9.7"
   }
 }
