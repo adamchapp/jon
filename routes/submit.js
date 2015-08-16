@@ -24,10 +24,6 @@ router.post('/', function(req, res, next) {
 	var going = req.body.going;
 	var distance = req.body.distance;
 
-	res.write('something responded');
-
-	res.render('result');
-
 	// cookiesService.setCookies(username, password)
  //    .then(function () {
  //    	return 
