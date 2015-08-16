@@ -48,7 +48,7 @@ router.post('/', function(req, res, next) {
 			res.end();
 		});
 
-		// scraperService.scrapeURLs(urls);
+		scraperService.scrapeURLs(urls);
 	})
 });
 
