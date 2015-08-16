@@ -116,7 +116,7 @@ exports.scrapeURLs = function(races) {
     });
 
     spooky.on('selected', function(winners) {
-        logger.debug(JSON.stringify(winners));
+        logger.info('emit result' + JSON.stringify(winners));
         results.push(winners);
 
         this.emit('result', winners);
