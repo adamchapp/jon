@@ -42,9 +42,9 @@ router.post('/', function(req, res, next) {
 	.then(function(results) {
 		logger.info('there are ' + results.length + ' results');
 
-		logger.info('writing file to ' + __dirname);
+		logger.info('writing file to downloads/data.csv');
 
-		fs.writeFile(__dirname + '/public/data.csv', results);
+		fs.writeFile('downloads/data.csv', results);
 	})
 });
 
