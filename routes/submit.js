@@ -24,6 +24,8 @@ router.post('/', function(req, res, next) {
 	var going = req.body.going;
 	var distance = req.body.distance;
 
+	res.render('result');
+
 	// cookiesService.setCookies(username, password)
  //    .then(function () {
  //    	return 
@@ -40,7 +42,7 @@ router.post('/', function(req, res, next) {
 	.then(function(results) {
 		logger.info('there are ' + results.length + ' results');
 
-		res.csv(results);
+		fs.writeFile(__dirname + '/public/data.csv', results);
 	})
 });
 
