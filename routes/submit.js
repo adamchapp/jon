@@ -25,9 +25,8 @@ router.post('/', function(req, res, next) {
 	var distance = req.body.distance;
 
 	res.render('result');
-	logger.info('writing file to ' + __dirname);
 
-	fs.writeFile(__dirname + 'public/blah.txt', 'hello', function(err) {
+	fs.writeFile('public/blah.txt', 'hello', function(err) {
 		logger.info('finished writing test file');
 	});
 
