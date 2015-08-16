@@ -24,11 +24,9 @@ router.post('/', function(req, res, next) {
 	var going = req.body.going;
 	var distance = req.body.distance;
 
-	res.render('result');
+	res.write('something responded');
 
-	fs.writeFile('public/blah.txt', 'hello', function(err) {
-		logger.info('finished writing test file');
-	});
+	res.render('result');
 
 	// cookiesService.setCookies(username, password)
  //    .then(function () {
