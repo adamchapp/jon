@@ -3,8 +3,10 @@
   "version": "0.0.3",
   "private": true,
   "scripts": {
-  "start": "node app.js"
-  }, 
+    "start": "node app.js"
+  },
+  "keywords": ["node", "express", "static"],
+  "image": "heroku/node", 
   "dependencies": {
     "body-parser": "~1.13.2",
     "casperjs": "^1.1.0-beta3",
@@ -20,7 +22,7 @@
     "serve-favicon": "~2.3.0",
     "spooky": "~0.2.5",
     "winston": "^1.0.1",
-    "casperjs": "^1.0.0",
+    "casperjs": "1.0.0",
     "phantomjs": "^1.9.8"
   }
 }
