@@ -39,9 +39,13 @@ router.post('/', function(req, res, next) {
 		var races = urls.map(extractGoing)
 						.map(extractDistance);
 
+		var stream = {}; //process.stdout works however
+		stream.writable = true;
+
 		scraperService.on('result', function(winners) { 
 			console.log('we have a result ' + JSON.stringify(winners));
-			res.json(winners);
+			stream.write(winners);
+			res.pipe(stream);
 		});
 
 		scraperService.on('done', function() {
