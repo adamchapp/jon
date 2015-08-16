@@ -1,10 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var csv = require('express-csv');
+var csv = require('fast-csv');
 var _ = require('lodash');
 
 var cookiesService = require('../scraper/services/cookieService');
-var scraperService = require('../scraper/services/scraperService');
+var ScraperService = require('../scraper/services/scraperService');
 var crawlerService = require('../scraper/services/crawlerService');
 
 var goingFunction = require('../scraper/controller/actions/header/extractGoing');
@@ -23,13 +23,22 @@ router.post('/', function(req, res, next) {
 	var password = req.body.password;
 	var going = req.body.going;
 	var distance = req.body.distance;
+	var scraperService = new ScraperService();
 
 	// cookiesService.setCookies(username, password)
  //    .then(function () {
  //    	return 
 	// })	
 	crawlerService.crawl(url).then(function(urls) {
-		logger.info('mapping races');
+		var filename = 'results.csv';
+		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+		res.setHeader('content-type', 'text/csv');
+		 
+		var csvStream = csv.createWriteStream({
+		    headers: true,
+		    objectMode: true
+		});
+
 		var extractGoing = _.partial(goingFunction, going);
 		var extractDistance = _.partial(distanceFunction, distance);
 		
@@ -42,15 +51,16 @@ router.post('/', function(req, res, next) {
 		logger.info('created stream for result');
 
 		scraperService.on('result', function(winners) { 
-			logger.info('we have a result ' + JSON.stringify(winners));
-			stream.write(winners);
-			res.pipe(stream);
+			csvStream.write(winners);
 		});
 
 		scraperService.on('done', function() {
-			res.end();
+			csvStream.end();
 		});
-		console.log('starting scraper');
+		  
+		// pipe the csvStream directly to the client
+		csvStream.pipe(res);
+
 		scraperService.scrapeURLs(urls);
 	})
 });
