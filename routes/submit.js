@@ -29,6 +29,7 @@ router.post('/', function(req, res, next) {
  //    	return 
 	// })	
 	crawlerService.crawl(url).then(function(urls) {
+		logger.info('mapping races');
 		var extractGoing = _.partial(goingFunction, going);
 		var extractDistance = _.partial(distanceFunction, distance);
 		
@@ -38,8 +39,10 @@ router.post('/', function(req, res, next) {
 		var stream = {}; //process.stdout works however
 		stream.writable = true;
 
+		logger.info('created stream for result');
+
 		scraperService.on('result', function(winners) { 
-			console.log('we have a result ' + JSON.stringify(winners));
+			logger.info('we have a result ' + JSON.stringify(winners));
 			stream.write(winners);
 			res.pipe(stream);
 		});
