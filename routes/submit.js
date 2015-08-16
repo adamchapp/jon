@@ -40,10 +40,12 @@ router.post('/', function(req, res, next) {
 						.map(extractDistance);
 
 		scraperService.on('result', function(winners) { 
-			console.log(JSON.stringify(winners));
+			res.write(winners);
 		});
 
-		scraperService.on('done', function())
+		scraperService.on('done', function() {
+			res.end();
+		});
 
 		return scraperService.scrapeURLs(urls);
 	})
