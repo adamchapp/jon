@@ -52,12 +52,7 @@ router.post('/', function(req, res, next) {
 			res.end();
 		});
 
-		return scraperService.scrapeURLs(urls);
-	})
-	.then(function(results) {
-		logger.info('there are ' + results.length + ' results');
-
-		fs.writeFile('downloads/data.csv', results);
+		scraperService.scrapeURLs(urls);
 	})
 });
 
