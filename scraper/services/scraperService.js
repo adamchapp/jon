@@ -119,7 +119,7 @@ exports.scrapeURLs = function(races) {
         logger.debug(JSON.stringify(winners));
         results.push(winners);
 
-        this.emit(winners);
+        this.emit('result', winners);
 
         if (results.length === races.length) {
             this.emit('done', results);
