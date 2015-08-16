@@ -47,7 +47,7 @@ router.post('/', function(req, res, next) {
 		scraperService.on('done', function() {
 			res.end();
 		});
-
+		console.log('starting scraper');
 		scraperService.scrapeURLs(urls);
 	})
 });

@@ -9,7 +9,7 @@ var setGoingAction = require('../controller/actions/setGoingAction');
 var setDistanceAction = require('../controller/actions/setDistanceAction');
 
 exports.scrapeURLs = function(races) {
-    // logger.info(races);
+    logger.info(races);
 
     var results = [];
 
