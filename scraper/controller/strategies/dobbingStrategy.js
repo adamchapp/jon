@@ -17,7 +17,7 @@ module.exports = function dobbingStrategy() {
             var prettyName = name.split(') ')[1].split('[')[0];
             var dobValue = Number(dob.split(' %')[0]);
             if (dobValue == 80) {
-                picks.push(prettyName + '(' + dobValue + ')');    
+                picks.push(prettyName);    
             } else if (dobValue == 100) {
                 var asterisksAndDigitMatches = dobSymbols.match(/[0-9*]/g);
                 var count = asterisksAndDigitMatches ? asterisksAndDigitMatches.length : 0;
