@@ -7,13 +7,10 @@ var cookiesService = require('../scraper/services/cookieService');
 var ScraperService = require('../scraper/services/scraperService');
 var crawlerService = require('../scraper/services/crawlerService');
 
-var goingFunction = require('../scraper/controller/actions/header/extractGoing');
-var distanceFunction = require('../scraper/controller/actions/header/extractDistance');
+var goingFunction = require('../scraper/model/domain/race/addGoing');
+var distanceFunction = require('../scraper/model/domain/race/addDistance');
 
 var logger = require('../scraper/utils/logger');
-
-// var username = 'sparrowman';
-// var password = 'hFagegB3V8';
 
 var months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 
@@ -23,6 +20,7 @@ router.post('/', function(req, res, next) {
 	var password = req.body.password;
 	var going = req.body.going;
 	var distance = req.body.distance;
+	var strategy = req.body.strategy;
 	var scraperService = new ScraperService();
 
 	// cookiesService.setCookies(username, password)
@@ -30,6 +28,11 @@ router.post('/', function(req, res, next) {
  //    	return 
 	// })	
 	crawlerService.crawl(url).then(function(urls) {
+
+		var testString = '**/*/***';
+		var count = testString.replace('/*/g').length;
+		console.log('there are ' + count + ' stars in this string: ' + testString);
+
 		var filename = 'results.csv';
 		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
 		res.setHeader('content-type', 'text/csv');
@@ -39,17 +42,6 @@ router.post('/', function(req, res, next) {
 		    objectMode: true
 		});
 
-		var extractGoing = _.partial(goingFunction, going);
-		var extractDistance = _.partial(distanceFunction, distance);
-		
-		var races = urls.map(extractGoing)
-						.map(extractDistance);
-
-		var stream = {}; //process.stdout works however
-		stream.writable = true;
-
-		logger.info('created stream for result');
-
 		scraperService.on('result', function(winners) { 
 			csvStream.write(winners);
 		});
@@ -57,16 +49,23 @@ router.post('/', function(req, res, next) {
 		scraperService.on('done', function() {
 			csvStream.end();
 		});
+
+		var addGoing = _.partial(goingFunction, going);
+		var addDistance = _.partial(distanceFunction, distance);
+
+		var races = urls.map(addGoing)
+						.map(addDistance);
 		  
 		// pipe the csvStream directly to the client
 		csvStream.pipe(res);
 
-		scraperService.scrapeURLs(urls);
+		scraperService.scrapeURLs(races, strategy);
 	})
 });
 
 function createURL(inputs) {
-	var prefix = (inputs.type = 'pttn') ? 'y' : 'xy';
+	logger.info('card type is ' + inputs.type);
+	var prefix = (inputs.type == 'pttn') ? 'y' : 'xy';
 	
 	var dateInputs = inputs.date.split('/');
 	var monthAsArrayIndex = dateInputs[1] - 1;

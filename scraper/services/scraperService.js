@@ -10,14 +10,21 @@ var setLookbackAction = require('../controller/actions/setLookbackAction');
 var setGoingAction = require('../controller/actions/setGoingAction');
 var setDistanceAction = require('../controller/actions/setDistanceAction');
 
+var ranToStrategy = require('../controller/strategies/ranToStrategy');
+var dobStrategy = require('../controller/strategies/dobbingStrategy');
+
 var ScraperService = function() {
     EventEmitter.call(this);
 } 
 
 util.inherits(ScraperService, EventEmitter);
 
-ScraperService.prototype.scrapeURLs = function scrapeURLs(races) {
-    logger.info(races);
+ScraperService.prototype.scrapeURLs = function scrapeURLs(races, strategyName) {
+    // logger.info(races);
+
+    var strategy = strategyName == "ranTo" ? ranToStrategy : dobStrategy;
+
+    logger.info(strategyName);
 
     var results = [];
 
@@ -55,66 +62,12 @@ ScraperService.prototype.scrapeURLs = function scrapeURLs(races) {
             spooky.thenEvaluate(going);
             spooky.thenEvaluate(distance);
 
-            spooky.then([{url:race.url}, function() {
-                var winners = this.evaluate(function (){
-                    
-                    srtOrder('hp');
+            spooky.then([{url:race.url}, strategy]);
 
-                    var table = document.main.querySelectorAll('table')[1];
-                    var rows = table.querySelectorAll('tr');
-                    
-                    // __utils__.echo((rows.length-1) + ' horses');
-
-                    var runners = rows.length-1;
-                    var first = '';
-                    var second = '';
-
-                    for (var index=0; index<runners; index++)
-                    {
-                        var name = document.getElementById('h' + index).innerHTML;
-                        var ranTo = document.getElementById('hp' + index).innerHTML;
-
-                        var isSelection = (ranTo && ranTo.length > 0);
-
-                        if (isSelection)
-                        {
-                            if (first.length === 0)
-                            {
-                                first = name.split(') ')[1].split('[')[0];
-                            }
-                            else
-                            {
-                                second = name.split(') ')[1].split('[')[0];
-                            }
-                        }
-
-                        if (first.length > 0 && second.length > 0)
-                        {
-                            break;
-                        }
-                    }
-
-                    var picks = {
-                        'first': first, 
-                        'second': second,
-                    };                    
-
-                    return picks;
-                });
-
-                if (url && winners)
-                {
-                    winners.url = url;    
-                }
-
-                this.emit('selected', winners);
-            }]);
-
-            // //take snapshot image after rules are applied
-            // spooky.wait(500, function() {
-            //     this.capture('images/final.png');   
-            //     // this.echo('final screenshot captured'); 
-            // });              
+            //take snapshot image after rules are applied
+            spooky.wait(100, function() {
+                this.capture('images/final.png');   
+            });              
         })
 
         spooky.run();
@@ -123,7 +76,6 @@ ScraperService.prototype.scrapeURLs = function scrapeURLs(races) {
     spooky.on('selected', onSelected.bind(this));
 
     function onSelected(winners) {
-        logger.info('emit result' + JSON.stringify(winners));
         results.push(winners);
 
         this.emit('result', winners);
