@@ -26,8 +26,6 @@ ScraperService.prototype.scrapeURLs = function scrapeURLs(races, strategyName) {
 
     logger.info(strategyName);
 
-    var results = [];
-
     var options = {
         child: { transport: 'http', 'cookies-file': 'cookies.txt' },
         casper: { logLevel: 'error', verbose: true }
@@ -46,28 +44,16 @@ ScraperService.prototype.scrapeURLs = function scrapeURLs(races, strategyName) {
 
         races.forEach(function(race) {
 
-            spooky.thenOpen(race.url);
-
-            spooky.waitForSelector('#filters > table > tbody > tr:nth-child(4) > td:nth-child(6) > select', function() {
-
-                this.capture('images/initial.png')
-            });
-
             //here we pass an eval to spooky, so let's replace the values beforehand
             var lookback = setLookbackAction();
             var going = String(setGoingAction).replace('VALUE', race.going.value);
             var distance = String(setDistanceAction).replace('VALUE', race.distance.value);
 
+            spooky.thenOpen(race.url);
             spooky.thenEvaluate(lookback);
             spooky.thenEvaluate(going);
             spooky.thenEvaluate(distance);
-
             spooky.then([{url:race.url}, strategy]);
-
-            //take snapshot image after rules are applied
-            spooky.wait(100, function() {
-                this.capture('images/final.png');   
-            });              
         })
 
         spooky.run();
@@ -75,13 +61,15 @@ ScraperService.prototype.scrapeURLs = function scrapeURLs(races, strategyName) {
 
     spooky.on('selected', onSelected.bind(this));
 
+    var counter = 0;
+
     function onSelected(winners) {
-        results.push(winners);
+        counter++; 
 
         this.emit('result', winners);
 
-        if (results.length === races.length) {
-            this.emit('done', results);
+        if (counter === races.length) {
+            this.emit('done');
         }
     }
 

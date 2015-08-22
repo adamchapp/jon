@@ -23,17 +23,9 @@ router.post('/', function(req, res, next) {
 	var strategy = req.body.strategy;
 	var scraperService = new ScraperService();
 
-	// cookiesService.setCookies(username, password)
- //    .then(function () {
- //    	return 
-	// })	
 	crawlerService.crawl(url).then(function(urls) {
 
-		var testString = '**/*/***';
-		var count = testString.replace('/*/g').length;
-		console.log('there are ' + count + ' stars in this string: ' + testString);
-
-		var filename = 'results.csv';
+		var filename = strategy + '-' + new Date().toString() + '.csv';
 		res.setHeader('Content-disposition', 'attachment; filename=' + filename);
 		res.setHeader('content-type', 'text/csv');
 		 
